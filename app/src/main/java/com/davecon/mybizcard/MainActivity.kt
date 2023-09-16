@@ -1,10 +1,13 @@
 package com.davecon.mybizcard
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -35,12 +38,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import com.davecon.mybizcard.ui.theme.MyBizCardTheme
+import com.popovanton0.blueprint.blueprintId
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +57,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = Color.White
                 ) {
                     CreateBizCard()
                 }
@@ -81,12 +88,11 @@ fun CreateBizCard() {
 
             HeadShotSection()
 
-            Divider(modifier = Modifier.padding(16.dp), thickness = 1.dp, color = Color.Black)
+            Divider(modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp), thickness = 1.dp, color = Color.Black)
 
             NameAndTitleSection()
 
             PortfolioButton()
-
         }
 
     }
@@ -123,13 +129,15 @@ fun HeadShotSection() {
 fun NameAndTitleSection() {
     Column(
         modifier = Modifier
-            .padding(24.dp),
+            .fillMaxWidth()
+            .padding(8.dp),
         verticalArrangement = Arrangement.Top,
     ) {
 
         Text(
             "David Contreras",
             style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
             fontSize = 36.sp,
             color = MaterialTheme.colorScheme.primary//colorResource(id = R.color.purple_500)
         )
@@ -154,23 +162,29 @@ fun PortfolioButton() {
     var buttonClickedState = remember {
         mutableStateOf(false)
     }
-    val url = "https://github.com/davidcon05"
-    val urlIntent = Intent(
-        Intent.ACTION_VIEW,
-        //Uri.(url)
-    )
+
+    // TODO: this links out to portfolio but its not web first
+//    val url = remember {
+//        mutableStateOf("https://github.com/davidcon05")
+//    }
+//    val context = LocalContext.current
+//    val urlIntent = Intent(
+//        Intent.ACTION_VIEW,
+//        Uri.parse(url.value)
+//    )
 
     Column(
         modifier = Modifier
+            .padding(top = 24.dp)
             .fillMaxWidth()
             .fillMaxHeight(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Button(onClick = {
-            Log.d("tag", "URL IS " + url)
+            // Log.d("tag", "URL IS " + url)
             // TODO: make this link out to my portfolio on github
-            //startActivity(urlIntent)
+            // context.startActivity(urlIntent)
             buttonClickedState.value = !buttonClickedState.value
         }) {
             Text(
@@ -182,9 +196,7 @@ fun PortfolioButton() {
         if (buttonClickedState.value) {
             PortfolioBox()
         } else {
-            Box() {
-
-            }
+            Box {}
         }
     }
 }
@@ -201,7 +213,7 @@ fun PortfolioBox() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp),
-            shape = RoundedCornerShape(CornerSize(8.dp)),
+            shape = RoundedCornerShape(CornerSize(12.dp)),
             border = BorderStroke(2.dp, Color.LightGray),
         ) {
             PorfolioCard(data = listOf("Project 1", "Project 2", "Project 3"))
@@ -216,6 +228,7 @@ fun PorfolioCard(data: List<String>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .blueprintId("PortfolioCard")
             .padding(8.dp),
         verticalArrangement = Arrangement.Top,
     ) {
