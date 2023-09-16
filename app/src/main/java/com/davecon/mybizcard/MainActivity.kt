@@ -31,16 +31,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import android.net.Uri
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import com.davecon.mybizcard.ui.theme.MyBizCardTheme
-import com.google.firebase.inappmessaging.model.Text
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,10 +61,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CreateBizCard() {
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxHeight(),
+
     ) {
 
         Card(
@@ -84,6 +86,7 @@ fun CreateBizCard() {
             NameAndTitleSection()
 
             PortfolioButton()
+
         }
 
     }
@@ -148,31 +151,91 @@ fun NameAndTitleSection() {
 
 @Composable
 fun PortfolioButton() {
+    var buttonClickedState = remember {
+        mutableStateOf(false)
+    }
     val url = "https://github.com/davidcon05"
     val urlIntent = Intent(
         Intent.ACTION_VIEW,
         //Uri.(url)
     )
 
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
         Button(onClick = {
             Log.d("tag", "URL IS " + url)
+            // TODO: make this link out to my portfolio on github
             //startActivity(urlIntent)
+            buttonClickedState.value = !buttonClickedState.value
         }) {
             Text(
                 "Portfolio",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.labelMedium,
                 fontSize = 24.sp,
             )
         }
+        if (buttonClickedState.value) {
+            PortfolioBox()
+        } else {
+            Box() {
+
+            }
+        }
     }
+}
+
+@Composable
+fun PortfolioBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .padding(4.dp)
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            shape = RoundedCornerShape(CornerSize(8.dp)),
+            border = BorderStroke(2.dp, Color.LightGray),
+        ) {
+            PorfolioCard(data = listOf("Project 1", "Project 2", "Project 3"))
+
+        }
+    }
+
+}
+
+@Composable
+fun PorfolioCard(data: List<String>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.Top,
+    ) {
+        LazyColumn() {
+            items(data.size) { item ->
+                Text(
+                    data[item],
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 16.sp,
+                )
+            }
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun PortfolioBoxPreview() {
+    PortfolioBox()
 }
 
 @Preview(showBackground = true)
