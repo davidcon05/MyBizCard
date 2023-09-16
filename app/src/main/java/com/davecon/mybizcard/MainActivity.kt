@@ -54,8 +54,8 @@ fun CreateBizCard() {
             .width(200.dp)
             .height(392.dp),
             shape = RoundedCornerShape(CornerSize(16.dp)),
-            colors = CardDefaults.cardColors(containerColor = Color.LightGray),
-            elevation = CardDefaults.cardElevation(4.dp),
+            //colors = CardDefaults.cardColors(containerColor = Color.LightGray),
+            elevation = CardDefaults.cardElevation(8.dp),
 
         ) {
             Text(text = "Hello World!")
