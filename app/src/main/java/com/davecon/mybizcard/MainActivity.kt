@@ -202,10 +202,18 @@ fun PortfolioBox() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp),
-            shape = RoundedCornerShape(CornerSize(12.dp)),
             border = BorderStroke(2.dp, Color.LightGray),
         ) {
-            PortfolioCard(data = listOf("Project 1", "Project 2", "Project 3"))
+            PortfolioCard(
+                data = listOf(
+                    "Project 1",
+                    "Project 2",
+                    "Project 3",
+                    "Project 4",
+                    "Project 5",
+                    "Project 6"
+                )
+            )
         }
     }
 }
@@ -228,7 +236,14 @@ fun PortfolioCard(data: List<String>) {
                     horizontalArrangement = Arrangement.Start
                 ) {
                     HeadShotSection(Modifier.size(64.dp), alignment = Alignment.Start)
-                    Text(data[item])
+                    Column(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        Text(data[item], fontWeight = FontWeight.Bold)
+                        Text("Android project", style = MaterialTheme.typography.bodyMedium)
+                    }
                 }
             }
         }
