@@ -224,7 +224,7 @@ fun PortfolioCard(data: List<String>) {
         items(data.size) { item ->
             Card(
                 modifier = Modifier
-                    .padding(12.dp)
+                    .padding(2.dp)
                     .fillMaxWidth(),
                 shape = RectangleShape
             ) {
